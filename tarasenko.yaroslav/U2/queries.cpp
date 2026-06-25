@@ -260,9 +260,14 @@ bool tarasenko::writeCommonPersons(std::ostream& output,
 
 void tarasenko::writePersonsWithInfo(std::ostream& output, const Database& database)
 {
+  std::size_t written = 0;
   for (std::size_t index = 0; index < database.persons.size; ++index) {
     if (database.persons.data[index].hasInfo) {
       output << database.persons.data[index].id << ' ' << database.persons.data[index].info << '\n';
+      ++written;
     }
+  }
+  if (written == 0) {
+    output << '\n';
   }
 }
