@@ -112,6 +112,11 @@ namespace
     tarasenko::writePersons(output, storage);
     return static_cast< bool >(output);
   }
+
+  bool hasProcessedRecords(const tarasenko::ReadStats& stats)
+  {
+    return (stats.accepted + stats.ignored) != 0;
+  }
 }
 
 int main(int argc, char* argv[])
@@ -133,7 +138,9 @@ int main(int argc, char* argv[])
     return FILE_OPEN_ERROR;
   }
 
-  std::cerr << stats.accepted << ' ' << stats.ignored << '\n';
+  if (hasProcessedRecords(stats)) {
+    std::cerr << stats.accepted << ' ' << stats.ignored << '\n';
+  }
   tarasenko::destroyPersonStorage(storage);
   return SUCCESS;
 }
