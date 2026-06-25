@@ -11,8 +11,8 @@ namespace tarasenko
   struct DynamicArray
   {
     T* data;
-    std::size_t size;
-    std::size_t capacity;
+    size_t size;
+    size_t capacity;
   };
 
   template< typename T >
@@ -32,7 +32,7 @@ namespace tarasenko
   }
 
   template< typename T >
-  void reserveDynamicArray(DynamicArray< T >& array, std::size_t newCapacity)
+  void reserveDynamicArray(DynamicArray< T >& array, size_t newCapacity)
   {
     if (newCapacity <= array.capacity) {
       return;
@@ -40,7 +40,7 @@ namespace tarasenko
 
     T* newData = new T[newCapacity];
     try {
-      for (std::size_t index = 0; index < array.size; ++index) {
+      for (size_t index = 0; index < array.size; ++index) {
         newData[index] = array.data[index];
       }
     } catch (...) {
@@ -56,13 +56,13 @@ namespace tarasenko
   template< typename T >
   void appendDynamicArray(DynamicArray< T >& array, const T& value)
   {
-    const std::size_t initialCapacity = 8;
-    const std::size_t growthFactor = 2;
+    const size_t initialCapacity = 8;
+    const size_t growthFactor = 2;
 
     if (array.size == array.capacity) {
-      std::size_t newCapacity = initialCapacity;
+      size_t newCapacity = initialCapacity;
       if (array.capacity != 0) {
-        if (array.capacity > (std::numeric_limits< std::size_t >::max() / growthFactor)) {
+        if (array.capacity > (std::numeric_limits< size_t >::max() / growthFactor)) {
           throw std::length_error("dynamic array capacity overflow");
         }
         newCapacity = array.capacity * growthFactor;

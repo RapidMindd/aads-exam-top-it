@@ -8,7 +8,7 @@ namespace tarasenko
 {
   struct Person
   {
-    std::size_t id;
+    size_t id;
     std::string info;
   };
 }
