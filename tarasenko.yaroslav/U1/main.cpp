@@ -165,12 +165,14 @@ int main(int argc, char* argv[])
       tarasenko::destroyPersonStorage(storage);
       return FILE_OPEN_ERROR;
     }
-    std::cerr << stats.accepted << ' ' << stats.ignored << '\n';
-  } else if (!writeEmptyResult(options)) {
-    tarasenko::destroyPersonStorage(storage);
-    return FILE_OPEN_ERROR;
+  } else {
+    if (!writeEmptyResult(options)) {
+      tarasenko::destroyPersonStorage(storage);
+      return FILE_OPEN_ERROR;
+    }
   }
 
+  std::cerr << stats.accepted << ' ' << stats.ignored << '\n';
   tarasenko::destroyPersonStorage(storage);
   return SUCCESS;
 }
