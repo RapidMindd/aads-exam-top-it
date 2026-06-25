@@ -157,7 +157,7 @@ namespace tarasenko
     }
 
     const std::string filename = line.substr(first, position - first);
-    std::ofstream output(filename.c_str());
+    std::ofstream output(filename.c_str(), std::ios_base::app);
     if (!output.is_open()) {
       return false;
     }
