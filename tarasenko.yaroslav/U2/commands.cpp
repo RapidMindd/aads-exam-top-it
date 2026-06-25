@@ -61,7 +61,7 @@ namespace
   {
     std::size_t id = 0;
     std::string info;
-    if (!tarasenko::readSize(line, position, id)) {
+    if (!readExistingId(line, position, database, id)) {
       return false;
     }
     if (!tarasenko::readQuotedText(line, position, info) || !tarasenko::isOnlySpaces(line, position)) {
@@ -209,4 +209,3 @@ void tarasenko::processCommands(std::istream& input, std::ostream& output, Datab
     }
   }
 }
-
