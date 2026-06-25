@@ -1,13 +1,11 @@
 #include "input_processing.hpp"
-
 #include <istream>
-
 #include "parse_utils.hpp"
 
 bool tarasenko::parsePersonLine(const std::string& line, Person& person)
 {
-  std::size_t position = 0;
-  std::size_t id = 0;
+  size_t position = 0;
+  size_t id = 0;
   if (!readSize(line, position, id)) {
     return false;
   }

@@ -12,8 +12,8 @@ namespace tarasenko
 {
   struct ReadStats
   {
-    std::size_t accepted;
-    std::size_t ignored;
+    size_t accepted;
+    size_t ignored;
   };
 
   bool parsePersonLine(const std::string& line, Person& person);

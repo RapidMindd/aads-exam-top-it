@@ -12,7 +12,7 @@ namespace tarasenko
 
   PersonStorage makePersonStorage();
   void destroyPersonStorage(PersonStorage& storage);
-  bool containsId(const PersonStorage& storage, std::size_t id);
+  bool containsId(const PersonStorage& storage, size_t id);
   void appendPerson(PersonStorage& storage, const Person& person);
 }
 

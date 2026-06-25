@@ -10,9 +10,9 @@ void tarasenko::destroyPersonStorage(PersonStorage& storage)
   destroyDynamicArray(storage);
 }
 
-bool tarasenko::containsId(const PersonStorage& storage, std::size_t id)
+bool tarasenko::containsId(const PersonStorage& storage, size_t id)
 {
-  for (std::size_t index = 0; index < storage.size; ++index) {
+  for (size_t index = 0; index < storage.size; ++index) {
     if (storage.data[index].id == id) {
       return true;
     }
