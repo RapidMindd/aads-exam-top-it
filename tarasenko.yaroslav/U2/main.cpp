@@ -120,19 +120,23 @@ int main(int argc, char* argv[])
   tarasenko::Database database = tarasenko::makeDatabase();
   if (!tarasenko::loadInputFile(options, database)) {
     std::cerr << "Cannot open input file\n";
+    tarasenko::destroyDatabase(database);
     return tarasenko::FILE_OPEN_ERROR;
   }
 
   const int dataStatus = tarasenko::loadDataFile(options, database);
   if (dataStatus == tarasenko::FILE_OPEN_ERROR) {
     std::cerr << "Cannot open data file\n";
+    tarasenko::destroyDatabase(database);
     return tarasenko::FILE_OPEN_ERROR;
   }
   if (dataStatus == tarasenko::DATA_ERROR) {
     std::cerr << "Invalid meetings data\n";
+    tarasenko::destroyDatabase(database);
     return tarasenko::DATA_ERROR;
   }
 
   tarasenko::processCommands(std::cin, std::cout, database);
+  tarasenko::destroyDatabase(database);
   return tarasenko::SUCCESS;
 }

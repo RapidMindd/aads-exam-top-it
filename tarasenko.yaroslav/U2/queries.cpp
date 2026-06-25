@@ -1,7 +1,8 @@
 #include "queries.hpp"
 
-#include <memory>
 #include <ostream>
+
+#include "dynamic_array.hpp"
 
 namespace tarasenko
 {
@@ -55,8 +56,9 @@ namespace tarasenko
   std::size_t countMeetings(const tarasenko::Database& database, std::size_t id)
   {
     std::size_t count = 0;
-    for (std::size_t index = 0; index < database.meetingCount; ++index) {
-      if ((database.meetings[index].first == id) || (database.meetings[index].second == id)) {
+    for (std::size_t index = 0; index < database.meetings.size; ++index) {
+      if ((database.meetings.data[index].first == id)
+          || (database.meetings.data[index].second == id)) {
         ++count;
       }
     }
@@ -65,13 +67,13 @@ namespace tarasenko
 
   std::size_t fillMeetingViews(const tarasenko::Database& database,
       std::size_t id,
-      MeetingView meetings[],
+      tarasenko::DynamicArray< MeetingView >& meetings,
       bool (*isAccepted)(std::size_t, std::size_t),
       std::size_t limitTime)
   {
     std::size_t writeIndex = 0;
-    for (std::size_t index = 0; index < database.meetingCount; ++index) {
-      const tarasenko::Meeting meeting = database.meetings[index];
+    for (std::size_t index = 0; index < database.meetings.size; ++index) {
+      const tarasenko::Meeting meeting = database.meetings.data[index];
       std::size_t other = 0;
       if (meeting.first == id) {
         other = meeting.second;
@@ -82,7 +84,7 @@ namespace tarasenko
       }
       if (isAccepted(meeting.time, limitTime)) {
         const MeetingView view = { other, meeting.time };
-        meetings[writeIndex] = view;
+        tarasenko::appendDynamicArray(meetings, view);
         ++writeIndex;
       }
     }
@@ -106,8 +108,8 @@ namespace tarasenko
 
   bool hasMeetingWith(const tarasenko::Database& database, std::size_t id, std::size_t other)
   {
-    for (std::size_t index = 0; index < database.meetingCount; ++index) {
-      const tarasenko::Meeting meeting = database.meetings[index];
+    for (std::size_t index = 0; index < database.meetings.size; ++index) {
+      const tarasenko::Meeting meeting = database.meetings.data[index];
       if (((meeting.first == id) && (meeting.second == other))
           || ((meeting.first == other) && (meeting.second == id))) {
         return true;
@@ -150,13 +152,15 @@ namespace tarasenko
     }
 
     const std::size_t maxCount = countMeetings(database, id);
-    std::unique_ptr< MeetingView[] > meetings(new MeetingView[maxCount]);
-    const std::size_t size = fillMeetingViews(database, id, meetings.get(), isAccepted, limitTime);
+    DynamicArray< MeetingView > meetings = makeDynamicArray< MeetingView >();
+    reserveDynamicArray(meetings, maxCount);
+    const std::size_t size = fillMeetingViews(database, id, meetings, isAccepted, limitTime);
 
-    sortMeetingViews(meetings.get(), size);
+    sortMeetingViews(meetings.data, size);
     for (std::size_t index = 0; index < size; ++index) {
-      output << meetings[index].person << ' ' << meetings[index].time << '\n';
+      output << meetings.data[index].person << ' ' << meetings.data[index].time << '\n';
     }
+    destroyDynamicArray(meetings);
     return true;
   }
   }
@@ -164,19 +168,19 @@ namespace tarasenko
 
 void tarasenko::writeAnons(std::ostream& output, const Database& database)
 {
-  std::unique_ptr< PersonRecord[] > persons(new PersonRecord[database.personCount]);
-  std::size_t size = 0;
-  for (std::size_t index = 0; index < database.personCount; ++index) {
-    if (!database.persons[index].hasInfo) {
-      persons[size] = database.persons[index];
-      ++size;
+  DynamicArray< PersonRecord > persons = makeDynamicArray< PersonRecord >();
+  reserveDynamicArray(persons, database.persons.size);
+  for (std::size_t index = 0; index < database.persons.size; ++index) {
+    if (!database.persons.data[index].hasInfo) {
+      appendDynamicArray(persons, database.persons.data[index]);
     }
   }
 
-  sortPersons(persons.get(), size);
-  for (std::size_t index = 0; index < size; ++index) {
-    output << persons[index].id << '\n';
+  sortPersons(persons.data, persons.size);
+  for (std::size_t index = 0; index < persons.size; ++index) {
+    output << persons.data[index].id << '\n';
   }
+  destroyDynamicArray(persons);
 }
 
 bool tarasenko::writeDescription(std::ostream& output, const Database& database, std::size_t id)
@@ -185,8 +189,8 @@ bool tarasenko::writeDescription(std::ostream& output, const Database& database,
   if (index < 0) {
     return false;
   }
-  if (database.persons[index].hasInfo) {
-    output << database.persons[index].info << '\n';
+  if (database.persons.data[index].hasInfo) {
+    output << database.persons.data[index].info << '\n';
   } else {
     output << "<ANON>\n";
   }
@@ -223,29 +227,30 @@ bool tarasenko::writeCommonPersons(std::ostream& output,
     return false;
   }
 
-  std::unique_ptr< std::size_t[] > persons(new std::size_t[database.personCount]);
-  std::size_t size = 0;
-  for (std::size_t index = 0; index < database.personCount; ++index) {
-    const std::size_t id = database.persons[index].id;
+  DynamicArray< std::size_t > persons = makeDynamicArray< std::size_t >();
+  reserveDynamicArray(persons, database.persons.size);
+  for (std::size_t index = 0; index < database.persons.size; ++index) {
+    const std::size_t id = database.persons.data[index].id;
     if ((id != first) && (id != second) && hasMeetingWith(database, first, id)
-        && hasMeetingWith(database, second, id) && !containsSize(persons.get(), size, id)) {
-      persons[size] = id;
-      ++size;
+        && hasMeetingWith(database, second, id)
+        && !containsSize(persons.data, persons.size, id)) {
+      appendDynamicArray(persons, id);
     }
   }
 
-  sortSizes(persons.get(), size);
-  for (std::size_t index = 0; index < size; ++index) {
-    output << persons[index] << '\n';
+  sortSizes(persons.data, persons.size);
+  for (std::size_t index = 0; index < persons.size; ++index) {
+    output << persons.data[index] << '\n';
   }
+  destroyDynamicArray(persons);
   return true;
 }
 
 void tarasenko::writePersonsWithInfo(std::ostream& output, const Database& database)
 {
-  for (std::size_t index = 0; index < database.personCount; ++index) {
-    if (database.persons[index].hasInfo) {
-      output << database.persons[index].id << ' ' << database.persons[index].info << '\n';
+  for (std::size_t index = 0; index < database.persons.size; ++index) {
+    if (database.persons.data[index].hasInfo) {
+      output << database.persons.data[index].id << ' ' << database.persons.data[index].info << '\n';
     }
   }
 }

@@ -2,8 +2,9 @@
 #define TARASENKO_YAROSLAV_U2_DOMAIN_HPP
 
 #include <cstddef>
-#include <memory>
 #include <string>
+
+#include "dynamic_array.hpp"
 
 namespace tarasenko
 {
@@ -23,15 +24,12 @@ namespace tarasenko
 
   struct Database
   {
-    std::unique_ptr< PersonRecord[] > persons;
-    std::size_t personCount;
-    std::size_t personCapacity;
-    std::unique_ptr< Meeting[] > meetings;
-    std::size_t meetingCount;
-    std::size_t meetingCapacity;
+    DynamicArray< PersonRecord > persons;
+    DynamicArray< Meeting > meetings;
   };
 
   Database makeDatabase();
+  void destroyDatabase(Database& database);
   int findPersonIndex(const Database& database, std::size_t id);
   bool hasPerson(const Database& database, std::size_t id);
   bool hasPersonInfo(const Database& database, std::size_t id);
