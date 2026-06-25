@@ -1,57 +1,14 @@
 #include "input_processing.hpp"
 
-#include <cctype>
 #include <istream>
-#include <limits>
 
-namespace
-{
-  bool isSpace(char symbol)
-  {
-    return std::isspace(static_cast< unsigned char >(symbol)) != 0;
-  }
-
-  std::size_t skipSpaces(const std::string& line, std::size_t position)
-  {
-    while ((position < line.size()) && isSpace(line[position])) {
-      ++position;
-    }
-    return position;
-  }
-
-  bool isBlankLine(const std::string& line)
-  {
-    return skipSpaces(line, 0) == line.size();
-  }
-
-  bool readId(const std::string& line, std::size_t& position, std::size_t& id)
-  {
-    position = skipSpaces(line, position);
-    if ((position == line.size()) || !std::isdigit(static_cast< unsigned char >(line[position]))) {
-      return false;
-    }
-
-    const std::size_t maxSize = std::numeric_limits< std::size_t >::max();
-    std::size_t parsedId = 0;
-    while ((position < line.size()) && std::isdigit(static_cast< unsigned char >(line[position]))) {
-      const std::size_t digit = static_cast< std::size_t >(line[position] - '0');
-      if (parsedId > ((maxSize - digit) / 10)) {
-        return false;
-      }
-      parsedId = (parsedId * 10) + digit;
-      ++position;
-    }
-
-    id = parsedId;
-    return true;
-  }
-}
+#include "parse_utils.hpp"
 
 bool tarasenko::parsePersonLine(const std::string& line, Person& person)
 {
   std::size_t position = 0;
   std::size_t id = 0;
-  if (!readId(line, position, id)) {
+  if (!readSize(line, position, id)) {
     return false;
   }
 
