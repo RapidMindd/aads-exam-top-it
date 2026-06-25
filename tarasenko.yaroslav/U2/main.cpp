@@ -81,6 +81,12 @@ namespace tarasenko
     return options.hasData;
   }
 
+  bool hasTooManyArguments(int argc)
+  {
+    const int maxArgumentCount = 3;
+    return argc > maxArgumentCount;
+  }
+
   bool loadInputFile(const ProgramOptions& options, tarasenko::Database& database)
   {
     if (!options.hasInput) {
@@ -111,6 +117,11 @@ namespace tarasenko
 
 int main(int argc, char* argv[])
 {
+  if (tarasenko::hasTooManyArguments(argc)) {
+    std::cerr << "Too many arguments\n";
+    return tarasenko::SUCCESS;
+  }
+
   tarasenko::ProgramOptions options = { false, false, "", "" };
   if (!tarasenko::parseArguments(argc, argv, options)) {
     std::cerr << "Invalid command line arguments\n";
