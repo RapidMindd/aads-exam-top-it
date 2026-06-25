@@ -177,8 +177,12 @@ void tarasenko::writeAnons(std::ostream& output, const Database& database)
   }
 
   sortPersons(persons.data, persons.size);
-  for (std::size_t index = 0; index < persons.size; ++index) {
-    output << persons.data[index].id << '\n';
+  if (persons.size == 0) {
+    output << '\n';
+  } else {
+    for (std::size_t index = 0; index < persons.size; ++index) {
+      output << persons.data[index].id << '\n';
+    }
   }
   destroyDynamicArray(persons);
 }
