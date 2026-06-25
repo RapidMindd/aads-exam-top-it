@@ -10,16 +10,16 @@ namespace tarasenko
 {
   struct PersonRecord
   {
-    std::size_t id;
+    size_t id;
     std::string info;
     bool hasInfo;
   };
 
   struct Meeting
   {
-    std::size_t first;
-    std::size_t second;
-    std::size_t time;
+    size_t first;
+    size_t second;
+    size_t time;
   };
 
   struct Database
@@ -30,13 +30,13 @@ namespace tarasenko
 
   Database makeDatabase();
   void destroyDatabase(Database& database);
-  int findPersonIndex(const Database& database, std::size_t id);
-  bool hasPerson(const Database& database, std::size_t id);
-  bool hasPersonInfo(const Database& database, std::size_t id);
-  void ensurePerson(Database& database, std::size_t id);
-  void setPersonInfo(Database& database, std::size_t id, const std::string& info);
+  int findPersonIndex(const Database& database, size_t id);
+  bool hasPerson(const Database& database, size_t id);
+  bool hasPersonInfo(const Database& database, size_t id);
+  void ensurePerson(Database& database, size_t id);
+  void setPersonInfo(Database& database, size_t id, const std::string& info);
   void appendMeeting(Database& database, const Meeting& meeting);
-  bool mergeAnonPerson(Database& database, std::size_t anonId, std::size_t id);
+  bool mergeAnonPerson(Database& database, size_t anonId, size_t id);
 }
 
 #endif

@@ -12,10 +12,10 @@ namespace tarasenko
   {
   const char INVALID_COMMAND[] = "<INVALID COMMAND>";
 
-  std::string readCommandName(const std::string& line, std::size_t& position)
+  std::string readCommandName(const std::string& line, size_t& position)
   {
     position = tarasenko::skipSpaces(line, position);
-    const std::size_t first = position;
+    const size_t first = position;
     while ((position < line.size()) && !tarasenko::isSpace(line[position])) {
       ++position;
     }
@@ -23,9 +23,9 @@ namespace tarasenko
   }
 
   bool readExistingId(const std::string& line,
-      std::size_t& position,
+      size_t& position,
       const tarasenko::Database& database,
-      std::size_t& id)
+      size_t& id)
   {
     if (!tarasenko::readSize(line, position, id)) {
       return false;
@@ -34,7 +34,7 @@ namespace tarasenko
   }
 
   bool runAnons(const std::string& line,
-      std::size_t position,
+      size_t position,
       std::ostream& output,
       const tarasenko::Database& database)
   {
@@ -46,11 +46,11 @@ namespace tarasenko
   }
 
   bool runDesc(const std::string& line,
-      std::size_t position,
+      size_t position,
       std::ostream& output,
       const tarasenko::Database& database)
   {
-    std::size_t id = 0;
+    size_t id = 0;
     if (!readExistingId(line, position, database, id) || !tarasenko::isOnlySpaces(line, position)) {
       return false;
     }
@@ -58,10 +58,10 @@ namespace tarasenko
   }
 
   bool runRedesc(const std::string& line,
-      std::size_t position,
+      size_t position,
       tarasenko::Database& database)
   {
-    std::size_t id = 0;
+    size_t id = 0;
     std::string info;
     if (!readExistingId(line, position, database, id)) {
       return false;
@@ -74,11 +74,11 @@ namespace tarasenko
   }
 
   bool runDeanon(const std::string& line,
-      std::size_t position,
+      size_t position,
       tarasenko::Database& database)
   {
-    std::size_t anonId = 0;
-    std::size_t id = 0;
+    size_t anonId = 0;
+    size_t id = 0;
     if (!tarasenko::readSize(line, position, anonId) || !tarasenko::readSize(line, position, id)
         || !tarasenko::isOnlySpaces(line, position)) {
       return false;
@@ -87,11 +87,11 @@ namespace tarasenko
   }
 
   bool runMeets(const std::string& line,
-      std::size_t position,
+      size_t position,
       std::ostream& output,
       const tarasenko::Database& database)
   {
-    std::size_t id = 0;
+    size_t id = 0;
     if (!readExistingId(line, position, database, id) || !tarasenko::isOnlySpaces(line, position)) {
       return false;
     }
@@ -99,12 +99,12 @@ namespace tarasenko
   }
 
   bool runCommons(const std::string& line,
-      std::size_t position,
+      size_t position,
       std::ostream& output,
       const tarasenko::Database& database)
   {
-    std::size_t first = 0;
-    std::size_t second = 0;
+    size_t first = 0;
+    size_t second = 0;
     if (!readExistingId(line, position, database, first)
         || !readExistingId(line, position, database, second)
         || !tarasenko::isOnlySpaces(line, position)) {
@@ -114,12 +114,12 @@ namespace tarasenko
   }
 
   bool runLess(const std::string& line,
-      std::size_t position,
+      size_t position,
       std::ostream& output,
       const tarasenko::Database& database)
   {
-    std::size_t time = 0;
-    std::size_t id = 0;
+    size_t time = 0;
+    size_t id = 0;
     if (!tarasenko::readSize(line, position, time)
         || !readExistingId(line, position, database, id)
         || !tarasenko::isOnlySpaces(line, position)) {
@@ -129,12 +129,12 @@ namespace tarasenko
   }
 
   bool runGreater(const std::string& line,
-      std::size_t position,
+      size_t position,
       std::ostream& output,
       const tarasenko::Database& database)
   {
-    std::size_t time = 0;
-    std::size_t id = 0;
+    size_t time = 0;
+    size_t id = 0;
     if (!tarasenko::readSize(line, position, time)
         || !readExistingId(line, position, database, id)
         || !tarasenko::isOnlySpaces(line, position)) {
@@ -144,11 +144,11 @@ namespace tarasenko
   }
 
   bool runOutPersons(const std::string& line,
-      std::size_t position,
+      size_t position,
       const tarasenko::Database& database)
   {
     position = tarasenko::skipSpaces(line, position);
-    const std::size_t first = position;
+    const size_t first = position;
     while ((position < line.size()) && !tarasenko::isSpace(line[position])) {
       ++position;
     }
@@ -169,7 +169,7 @@ namespace tarasenko
       std::ostream& output,
       tarasenko::Database& database)
   {
-    std::size_t position = 0;
+    size_t position = 0;
     const std::string command = readCommandName(line, position);
     if (command == "anons") {
       return runAnons(line, position, output, database);

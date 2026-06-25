@@ -8,9 +8,9 @@ namespace tarasenko
 {
   namespace
   {
-  bool parsePersonLine(const std::string& line, std::size_t& id, std::string& info)
+  bool parsePersonLine(const std::string& line, size_t& id, std::string& info)
   {
-    std::size_t position = 0;
+    size_t position = 0;
     if (!tarasenko::readSize(line, position, id)) {
       return false;
     }
@@ -26,7 +26,7 @@ namespace tarasenko
 
   bool parseMeetingLine(const std::string& line, tarasenko::Meeting& meeting)
   {
-    std::size_t position = 0;
+    size_t position = 0;
     if (!tarasenko::readSize(line, position, meeting.first)) {
       return false;
     }
@@ -45,7 +45,7 @@ void tarasenko::loadPersons(std::istream& input, Database& database)
 {
   std::string line;
   while (std::getline(input, line)) {
-    std::size_t id = 0;
+    size_t id = 0;
     std::string info;
     if (!parsePersonLine(line, id, info) || hasPerson(database, id)) {
       continue;
