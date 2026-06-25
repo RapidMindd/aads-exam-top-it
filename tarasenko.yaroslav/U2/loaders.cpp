@@ -4,8 +4,10 @@
 
 #include "parse_utils.hpp"
 
-namespace
+namespace tarasenko
 {
+  namespace
+  {
   bool parsePersonLine(const std::string& line, std::size_t& id, std::string& info)
   {
     std::size_t position = 0;
@@ -35,6 +37,7 @@ namespace
       return false;
     }
     return tarasenko::isOnlySpaces(line, position);
+  }
   }
 }
 

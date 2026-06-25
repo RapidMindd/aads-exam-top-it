@@ -6,8 +6,10 @@
 #include "parse_utils.hpp"
 #include "queries.hpp"
 
-namespace
+namespace tarasenko
 {
+  namespace
+  {
   const char INVALID_COMMAND[] = "<INVALID COMMAND>";
 
   std::string readCommandName(const std::string& line, std::size_t& position)
@@ -197,6 +199,7 @@ namespace
       return runOutPersons(line, position, database);
     }
     return false;
+  }
   }
 }
 

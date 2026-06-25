@@ -3,8 +3,10 @@
 #include <memory>
 #include <ostream>
 
-namespace
+namespace tarasenko
 {
+  namespace
+  {
   struct MeetingView
   {
     std::size_t person;
@@ -156,6 +158,7 @@ namespace
       output << meetings[index].person << ' ' << meetings[index].time << '\n';
     }
     return true;
+  }
   }
 }
 

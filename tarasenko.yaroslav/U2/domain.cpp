@@ -3,8 +3,10 @@
 #include <limits>
 #include <stdexcept>
 
-namespace
+namespace tarasenko
 {
+  namespace
+  {
   const std::size_t INITIAL_CAPACITY = 8;
   const std::size_t GROWTH_FACTOR = 2;
 
@@ -45,6 +47,7 @@ namespace
     }
     database.meetings.swap(meetings);
     database.meetingCapacity = capacity;
+  }
   }
 }
 

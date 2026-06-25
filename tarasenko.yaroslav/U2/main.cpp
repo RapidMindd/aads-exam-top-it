@@ -6,8 +6,10 @@
 #include "domain.hpp"
 #include "loaders.hpp"
 
-namespace
+namespace tarasenko
 {
+  namespace
+  {
   const int SUCCESS = 0;
   const int INVALID_ARGUMENTS = 1;
   const int FILE_OPEN_ERROR = 2;
@@ -104,32 +106,33 @@ namespace
     }
     return SUCCESS;
   }
+  }
 }
 
 int main(int argc, char* argv[])
 {
-  ProgramOptions options = { false, false, "", "" };
-  if (!parseArguments(argc, argv, options)) {
+  tarasenko::ProgramOptions options = { false, false, "", "" };
+  if (!tarasenko::parseArguments(argc, argv, options)) {
     std::cerr << "Invalid command line arguments\n";
-    return INVALID_ARGUMENTS;
+    return tarasenko::INVALID_ARGUMENTS;
   }
 
   tarasenko::Database database = tarasenko::makeDatabase();
-  if (!loadInputFile(options, database)) {
+  if (!tarasenko::loadInputFile(options, database)) {
     std::cerr << "Cannot open input file\n";
-    return FILE_OPEN_ERROR;
+    return tarasenko::FILE_OPEN_ERROR;
   }
 
-  const int dataStatus = loadDataFile(options, database);
-  if (dataStatus == FILE_OPEN_ERROR) {
+  const int dataStatus = tarasenko::loadDataFile(options, database);
+  if (dataStatus == tarasenko::FILE_OPEN_ERROR) {
     std::cerr << "Cannot open data file\n";
-    return FILE_OPEN_ERROR;
+    return tarasenko::FILE_OPEN_ERROR;
   }
-  if (dataStatus == DATA_ERROR) {
+  if (dataStatus == tarasenko::DATA_ERROR) {
     std::cerr << "Invalid meetings data\n";
-    return DATA_ERROR;
+    return tarasenko::DATA_ERROR;
   }
 
   tarasenko::processCommands(std::cin, std::cout, database);
-  return SUCCESS;
+  return tarasenko::SUCCESS;
 }
