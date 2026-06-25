@@ -1,18 +1,14 @@
-#ifndef TARASENKO_YAROSLAV_U1_PERSON_STORAGE_HPP
-#define TARASENKO_YAROSLAV_U1_PERSON_STORAGE_HPP
+#ifndef TARASENKO_YAROSLAV_COMMON_PERSON_STORAGE_HPP
+#define TARASENKO_YAROSLAV_COMMON_PERSON_STORAGE_HPP
 
 #include <cstddef>
 
+#include "dynamic_array.hpp"
 #include "person.hpp"
 
 namespace tarasenko
 {
-  struct PersonStorage
-  {
-    Person* data;
-    std::size_t size;
-    std::size_t capacity;
-  };
+  using PersonStorage = DynamicArray< Person >;
 
   PersonStorage makePersonStorage();
   void destroyPersonStorage(PersonStorage& storage);
