@@ -19,6 +19,11 @@ namespace
     return position;
   }
 
+  bool isBlankLine(const std::string& line)
+  {
+    return skipSpaces(line, 0) == line.size();
+  }
+
   bool readId(const std::string& line, std::size_t& position, std::size_t& id)
   {
     position = skipSpaces(line, position);
@@ -65,6 +70,10 @@ tarasenko::ReadStats tarasenko::readPersons(std::istream& input, PersonStorage& 
   ReadStats stats = { 0, 0 };
   std::string line;
   while (std::getline(input, line)) {
+    if (isBlankLine(line)) {
+      continue;
+    }
+
     Person person = { 0, "" };
     if (!parsePersonLine(line, person) || containsId(storage, person.id)) {
       ++stats.ignored;
