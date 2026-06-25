@@ -119,6 +119,22 @@ namespace
     return static_cast< bool >(output);
   }
 
+  bool writeEmptyResult(const ProgramOptions& options)
+  {
+    if (!options.hasOutput) {
+      std::cout << '\n';
+      return static_cast< bool >(std::cout);
+    }
+
+    std::ofstream output(options.outputName.c_str());
+    if (!output.is_open()) {
+      return false;
+    }
+
+    output << '\n';
+    return static_cast< bool >(output);
+  }
+
   bool hasProcessedRecords(const tarasenko::ReadStats& stats)
   {
     return (stats.accepted + stats.ignored) != 0;
@@ -144,14 +160,17 @@ int main(int argc, char* argv[])
     return FILE_OPEN_ERROR;
   }
 
-  if (!writeOutput(options, storage)) {
+  if (hasProcessedRecords(stats)) {
+    if (!writeOutput(options, storage)) {
+      tarasenko::destroyPersonStorage(storage);
+      return FILE_OPEN_ERROR;
+    }
+    std::cerr << stats.accepted << ' ' << stats.ignored << '\n';
+  } else if (!writeEmptyResult(options)) {
     tarasenko::destroyPersonStorage(storage);
     return FILE_OPEN_ERROR;
   }
 
-  if (hasProcessedRecords(stats)) {
-    std::cerr << stats.accepted << ' ' << stats.ignored << '\n';
-  }
   tarasenko::destroyPersonStorage(storage);
   return SUCCESS;
 }
