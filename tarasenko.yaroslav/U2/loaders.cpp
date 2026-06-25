@@ -58,6 +58,10 @@ bool tarasenko::loadMeetings(std::istream& input, Database& database)
 {
   std::string line;
   while (std::getline(input, line)) {
+    if (isBlankLine(line)) {
+      continue;
+    }
+
     Meeting meeting = { 0, 0, 0 };
     if (!parseMeetingLine(line, meeting)) {
       return false;
@@ -71,4 +75,3 @@ bool tarasenko::loadMeetings(std::istream& input, Database& database)
   }
   return true;
 }
-
