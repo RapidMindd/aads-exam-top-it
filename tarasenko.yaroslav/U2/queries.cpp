@@ -239,8 +239,12 @@ bool tarasenko::writeCommonPersons(std::ostream& output,
   }
 
   sortSizes(persons.data, persons.size);
-  for (std::size_t index = 0; index < persons.size; ++index) {
-    output << persons.data[index] << '\n';
+  if (persons.size == 0) {
+    output << '\n';
+  } else {
+    for (std::size_t index = 0; index < persons.size; ++index) {
+      output << persons.data[index] << '\n';
+    }
   }
   destroyDynamicArray(persons);
   return true;
