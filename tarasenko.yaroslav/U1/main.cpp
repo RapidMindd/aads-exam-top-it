@@ -128,6 +128,7 @@ namespace
 int main(int argc, char* argv[])
 {
   if (hasTooManyArguments(argc)) {
+    std::cerr << "Too many arguments\n";
     return SUCCESS;
   }
 
