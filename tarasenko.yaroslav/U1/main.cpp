@@ -124,13 +124,16 @@ int main(int argc, char* argv[])
   tarasenko::PersonStorage storage = tarasenko::makePersonStorage();
   tarasenko::ReadStats stats = { 0, 0 };
   if (!readInput(options, storage, stats)) {
+    tarasenko::destroyPersonStorage(storage);
     return FILE_OPEN_ERROR;
   }
 
   if (!writeOutput(options, storage)) {
+    tarasenko::destroyPersonStorage(storage);
     return FILE_OPEN_ERROR;
   }
 
   std::cerr << stats.accepted << ' ' << stats.ignored << '\n';
+  tarasenko::destroyPersonStorage(storage);
   return SUCCESS;
 }

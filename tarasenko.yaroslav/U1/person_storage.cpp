@@ -1,6 +1,5 @@
 #include "person_storage.hpp"
 
-#include <algorithm>
 #include <limits>
 #include <stdexcept>
 
@@ -15,12 +14,18 @@ namespace
       return;
     }
 
-    std::unique_ptr< tarasenko::Person[] > newPersons(new tarasenko::Person[newCapacity]);
-    for (std::size_t index = 0; index < storage.size; ++index) {
-      newPersons[index] = storage.persons[index];
+    tarasenko::Person* newData = new tarasenko::Person[newCapacity];
+    try {
+      for (std::size_t index = 0; index < storage.size; ++index) {
+        newData[index] = storage.data[index];
+      }
+    } catch (...) {
+      delete[] newData;
+      throw;
     }
 
-    storage.persons.swap(newPersons);
+    delete[] storage.data;
+    storage.data = newData;
     storage.capacity = newCapacity;
   }
 }
@@ -31,10 +36,18 @@ tarasenko::PersonStorage tarasenko::makePersonStorage()
   return storage;
 }
 
+void tarasenko::destroyPersonStorage(PersonStorage& storage)
+{
+  delete[] storage.data;
+  storage.data = nullptr;
+  storage.size = 0;
+  storage.capacity = 0;
+}
+
 bool tarasenko::containsId(const PersonStorage& storage, std::size_t id)
 {
   for (std::size_t index = 0; index < storage.size; ++index) {
-    if (storage.persons[index].id == id) {
+    if (storage.data[index].id == id) {
       return true;
     }
   }
@@ -54,6 +67,6 @@ void tarasenko::appendPerson(PersonStorage& storage, const Person& person)
     reserveStorage(storage, newCapacity);
   }
 
-  storage.persons[storage.size] = person;
+  storage.data[storage.size] = person;
   ++storage.size;
 }

@@ -2,7 +2,6 @@
 #define TARASENKO_YAROSLAV_U1_PERSON_STORAGE_HPP
 
 #include <cstddef>
-#include <memory>
 
 #include "person.hpp"
 
@@ -10,12 +9,13 @@ namespace tarasenko
 {
   struct PersonStorage
   {
-    std::unique_ptr< Person[] > persons;
+    Person* data;
     std::size_t size;
     std::size_t capacity;
   };
 
   PersonStorage makePersonStorage();
+  void destroyPersonStorage(PersonStorage& storage);
   bool containsId(const PersonStorage& storage, std::size_t id);
   void appendPerson(PersonStorage& storage, const Person& person);
 }

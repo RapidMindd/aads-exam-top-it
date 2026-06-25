@@ -5,6 +5,6 @@
 void tarasenko::writePersons(std::ostream& output, const PersonStorage& storage)
 {
   for (std::size_t index = 0; index < storage.size; ++index) {
-    output << storage.persons[index].id << ' ' << storage.persons[index].info << '\n';
+    output << storage.data[index].id << ' ' << storage.data[index].info << '\n';
   }
 }
