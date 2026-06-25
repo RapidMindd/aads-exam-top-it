@@ -157,8 +157,12 @@ namespace tarasenko
     const std::size_t size = fillMeetingViews(database, id, meetings, isAccepted, limitTime);
 
     sortMeetingViews(meetings.data, size);
-    for (std::size_t index = 0; index < size; ++index) {
-      output << meetings.data[index].person << ' ' << meetings.data[index].time << '\n';
+    if (size == 0) {
+      output << '\n';
+    } else {
+      for (std::size_t index = 0; index < size; ++index) {
+        output << meetings.data[index].person << ' ' << meetings.data[index].time << '\n';
+      }
     }
     destroyDynamicArray(meetings);
     return true;
